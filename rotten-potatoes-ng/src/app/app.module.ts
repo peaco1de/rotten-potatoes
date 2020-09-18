@@ -13,17 +13,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { GamesComponent } from './games/games.component';
+import { DetailsDialogComponent } from './details/details-dialog.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
         GamesComponent,
+        DetailsDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,6 +47,7 @@ import { GamesComponent } from './games/games.component';
         MatListModule,
         MatProgressSpinnerModule,
         MatCardModule,
+        MatDialogModule
     ],
     providers: [],
     bootstrap: [AppComponent]

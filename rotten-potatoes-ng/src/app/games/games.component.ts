@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ReviewService } from '../services/review.service';
 import { Game } from '../models/Game';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailsDialogComponent } from '../details/details-dialog.component';
 
 @Component({
     selector: 'app-games',
@@ -27,6 +29,7 @@ export class GamesComponent implements OnInit {
     }
 
     constructor(
+        private _dialog: MatDialog,
         private _reviewService: ReviewService
     ) {
 
@@ -40,5 +43,13 @@ export class GamesComponent implements OnInit {
                 this.filteredGames.push(...this.games);
                 this.isLoading = false;
             });
+    }
+
+    showDetails(game: Game) {
+        this._dialog.open(DetailsDialogComponent, {
+            data: {
+                game: game
+            }
+        });
     }
 }

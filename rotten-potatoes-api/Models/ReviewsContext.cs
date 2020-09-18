@@ -16,10 +16,10 @@ namespace rotten_potatoes_api.Models
 		protected override void OnModelCreating(ModelBuilder builder)
         {
 			builder.Entity<Review>()
-				.HasKey("ReviewId");
+				.HasKey("Id");
 
 			builder.Entity<Review>()
-				.Property("ReviewId")
+				.Property("Id")
 				.ValueGeneratedOnAdd();
 		}
 	}

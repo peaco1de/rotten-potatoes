@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>{{ game.name }}</h2>
+<mat-dialog-content>
+    <div class="details-grid">
+        <div class="box" gdarea="image" style="background-color: red;"></div>
+        <div class="box" gdarea="details" style="background-color: blue;"></div>
+        <div class="box" gdarea="reviews" style="background-color: green;"></div>
+        <mat-spinner *ngIf="isLoading" style="margin: auto"></mat-spinner>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Close</button>
+    <button mat-button [mat-dialog-close]="true">New Review</button>
+</mat-dialog-actions>
+
+
+
