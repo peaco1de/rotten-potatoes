@@ -9,7 +9,22 @@ import { Game } from '../models/Game';
 })
 export class GamesComponent implements OnInit {
 
-    search: string;
+
+    isLoading: boolean = false;
+
+    games: Game[] = [];
+    filteredGames: Game[] = [];
+
+    private _search: string = '';
+    get search(): string {
+        return this._search;
+    }
+    set search(search: string) {
+        this.isLoading = true;
+        this._search = search;
+        this.filteredGames = this.games.filter(o => o.name.toLowerCase().includes(search.toLowerCase()));
+        this.isLoading = false;
+    }
 
     constructor(
         private _reviewService: ReviewService
@@ -18,6 +33,12 @@ export class GamesComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        this.isLoading = true;
+        this._reviewService.getScores()
+            .subscribe(o => {
+                this.games.push(...o);
+                this.filteredGames.push(...this.games);
+                this.isLoading = false;
+            });
     }
 }

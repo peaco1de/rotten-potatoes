@@ -24,4 +24,8 @@ export class ReviewService {
         return this._httpClient.get<Game>(`${_baseApiUrl}games/${gameId}`);
     }
 
+    public getScores(): Observable<Game[]> {
+        return this._httpClient.get<Game[]>(`${_baseApiUrl}scores`)
+    }
+
 }

@@ -10,6 +10,9 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -17,29 +20,32 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { GamesComponent } from './games/games.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    GamesComponent,
-  ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-    ]),
-    BrowserAnimationsModule,
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        GamesComponent,
+    ],
+    imports: [
+        BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+        HttpClientModule,
+        FormsModule,
+        RouterModule.forRoot([
+            { path: '', component: HomeComponent, pathMatch: 'full' },
+        ]),
+        BrowserAnimationsModule,
 
-    FlexLayoutModule,
+        FlexLayoutModule,
 
-    //material
-    MatTabsModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+        //material
+        MatTabsModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatListModule,
+        MatProgressSpinnerModule,
+        MatCardModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

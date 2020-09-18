@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,7 +19,7 @@ namespace rotten_potatoes_api.Controllers
     public class ReviewsController : ControllerBase
     {
         private const string IGDB_KEY = "236c3817b529d90e52ffddbc60c8b0d3";
-        private const string IGDB = @"https://api-v3.igdb.com/games";
+        private const string IGDB_URL = @"https://api-v3.igdb.com/games";
 
         private static readonly HttpClient _client = new HttpClient();
         private static readonly ReviewsContext _context = new ReviewsContext();
@@ -31,7 +32,7 @@ namespace rotten_potatoes_api.Controllers
         [HttpGet("games/search/{search}")]
         public IActionResult GetGames(string search)
         {
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB))
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
             {
                 requestMessage.Headers.Add("user-key", IGDB_KEY);
                 requestMessage.Content = new StringContent($"fields id, name; limit 100; search \"{search}\";");
@@ -44,20 +45,20 @@ namespace rotten_potatoes_api.Controllers
         [HttpGet("scores")]
         public IActionResult GetScores()
         {
-            List<dynamic> games;
+            List<Game> games;
 
-            var ids = _context.Reviews.Select(o => o.Game);
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB))
+            var ids = _context.Reviews.Select(o => o.Game).Distinct();
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
             {
                 requestMessage.Headers.Add("user-key", IGDB_KEY);
-                requestMessage.Content = new StringContent($"fields id, name; limit 100; where id = ({string.Join(',', ids)});");
+                requestMessage.Content = new StringContent($"fields id, name, summary, cover.url; where id = ({string.Join(',', ids)});");
                 var responseTask = _client.SendAsync(requestMessage);
-                games = JsonSerializer.Deserialize<List<dynamic>>(responseTask.Result.Content.ReadAsStringAsync().Result);
+                games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
             }
 
             var scores = _context.Reviews.GroupBy(o => o.Game).Select(o => new { GameId = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
 
-            var result = scores.Join(games, o => o.GameId, i => i.id, (o, i) => new { o.GameId, Name = i.name, o.AvgScore, o.NumberOfReviews });
+            var result = scores.Join(games, o => o.GameId, i => i.Id, (o, i) => new { o.GameId, i.Name, o.AvgScore, o.NumberOfReviews, CoverUrl = i.Cover.Url , i.Summary });
 
             return new JsonResult(result);
         }
@@ -65,14 +66,14 @@ namespace rotten_potatoes_api.Controllers
         [HttpGet("games/{id}")]
         public IActionResult GetGame(int id)
         {
-            dynamic game;
+            Game game;
 
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB))
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
             {
                 requestMessage.Headers.Add("user-key", IGDB_KEY);
                 requestMessage.Content = new StringContent($"fields id, name; where id = {id};");
                 var responseTask = _client.SendAsync(requestMessage);
-                game = JsonSerializer.Deserialize<List<dynamic>>(responseTask.Result.Content.ReadAsStringAsync().Result).FirstOrDefault();
+                game = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result).FirstOrDefault();
             }
 
             return new JsonResult(game);

@@ -6,12 +6,18 @@ using System.Threading.Tasks;
 
 namespace rotten_potatoes_api.Controllers
 {
-    //public class Game
-    //{
-    //    [JsonPropertyName("id")]
-    //    public int Id { get; set; }
+    public struct Game
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
 
-    //    [JsonPropertyName("name")]
-    //    public string Name { get; set; }
-    //}
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        
+        [JsonPropertyName("summary")]
+        public string Summary { get; set; }
+
+        [JsonPropertyName("cover")]
+        public Cover Cover { get; set; }
+    }
 }

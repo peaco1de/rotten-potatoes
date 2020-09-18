@@ -3,4 +3,6 @@ export interface Game {
     name: string;
     avgScore: number;
     numberOfReviews: number;
+    coverUrl: string;
+    summary: string;
 }
