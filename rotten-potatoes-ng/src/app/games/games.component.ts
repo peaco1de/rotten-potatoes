@@ -3,6 +3,7 @@ import { ReviewService } from '../services/review.service';
 import { Game } from '../models/Game';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailsDialogComponent } from '../details/details-dialog.component';
+import { AddDialogComponent } from '../add/add-dialog.component';
 
 @Component({
     selector: 'app-games',
@@ -37,7 +38,7 @@ export class GamesComponent implements OnInit {
 
     ngOnInit(): void {
         this.isLoading = true;
-        this._reviewService.getScores()
+        this._reviewService.getGames("")
             .subscribe(o => {
                 this.games.push(...o);
                 this.filteredGames.push(...this.games);
@@ -47,9 +48,13 @@ export class GamesComponent implements OnInit {
 
     showDetails(game: Game) {
         this._dialog.open(DetailsDialogComponent, {
-            data: {
-                game: game
-            }
+            data: game
+        });
+    }
+
+    showAdd(game: Game) {
+        this._dialog.open(AddDialogComponent, {
+            data: game
         });
     }
 }

@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>New Review: {{ game.name }}</h2>
+<mat-dialog-content>
+    <div class="details-grid">
+        <div class="box image-box">
+            <img src="{{ game.coverUrl }}"
+                 alt="No Image"
+                 class="cover-image" />
+        </div>
+        <div class="box details-box">
+            <div class="scrollable">
+                <h3>Average Score: {{ game.avgScore }}/10</h3>
+                <h3>Number of Reviews: {{ game.numberOfReviews }}</h3>
+
+                <h3>Summary</h3>
+                <p>{{ game.summary }}</p>
+            </div>
+        </div>
+        <div class="box review-box" *ngIf="newReview">
+            <mat-form-field style="width: 200px; margin-right: 20px">
+                <mat-label>User</mat-label>
+                <input matInput [(ngModel)]="newReview.user">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Score</mat-label>
+                <mat-select [(ngModel)]="newReview.score">
+                    <mat-option *ngFor="let number of [0,1,2,3,4,5,6,7,8,9,10]"
+                                [value]="number">
+                        {{ number }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <br>
+            <mat-form-field style="width: 500px;">
+                <mat-label>Review</mat-label>
+                <textarea matInput [(ngModel)]="newReview.details"
+                          rows="5"></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" (click)="submit()">Submit</button>
+</mat-dialog-actions>

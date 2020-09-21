@@ -14,19 +14,24 @@ import { MatListModule } from '@angular/material/list';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { GamesComponent } from './games/games.component';
 import { DetailsDialogComponent } from './details/details-dialog.component';
+import { AddDialogComponent } from './add/add-dialog.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
         GamesComponent,
-        DetailsDialogComponent
+        DetailsDialogComponent,
+        AddDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -47,7 +52,9 @@ import { DetailsDialogComponent } from './details/details-dialog.component';
         MatListModule,
         MatProgressSpinnerModule,
         MatCardModule,
-        MatDialogModule
+        MatDialogModule,
+        MatFormFieldModule,
+        MatSelectModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -21,16 +21,19 @@ export class ReviewService {
         return this._httpClient.get(`${_baseApiUrl}test`)
     }
 
-    public getGame(gameId: number) : Observable<Game> {
-        return this._httpClient.get<Game>(`${_baseApiUrl}games/${gameId}`);
-    }
+    //public getGame(gameId: number) : Observable<Game> {
+    //    return this._httpClient.get<Game>(`${_baseApiUrl}games/${gameId}`);
+    //}
 
-    public getScores(): Observable<Game[]> {
-        return this._httpClient.get<Game[]>(`${_baseApiUrl}scores`)
+    public getGames(search: string): Observable<Game[]> {
+        return this._httpClient.get<Game[]>(`${_baseApiUrl}games/${search}`);
     }
 
     public getReviews(gameId: number): Observable<Review[]> {
         return this._httpClient.get<Review[]>(`${_baseApiUrl}reviews/${gameId}`);
     }
 
+    public putReview(review: Review) {
+        return this._httpClient.put(`${_baseApiUrl}reviews`, { Game: review.game, User: review.user, Score: review.score, Details: review.details });
+    }
 }

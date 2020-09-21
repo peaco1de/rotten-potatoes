@@ -16,11 +16,11 @@ namespace rotten_potatoes_api.Models
 		protected override void OnModelCreating(ModelBuilder builder)
         {
 			builder.Entity<Review>()
-				.HasKey("Id");
+				.HasKey(new[] { "Game", "User" });
 
 			builder.Entity<Review>()
-				.Property("Id")
-				.ValueGeneratedOnAdd();
+				.Property("AddDate")
+				.HasDefaultValue(DateTime.Now);
 		}
 	}
 }

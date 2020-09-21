@@ -29,63 +29,96 @@ namespace rotten_potatoes_api.Controllers
 
         }
 
-        [HttpGet("games/search/{search}")]
-        public IActionResult GetGames(string search)
-        {
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
-            {
-                requestMessage.Headers.Add("user-key", IGDB_KEY);
-                requestMessage.Content = new StringContent($"fields id, name; limit 100; search \"{search}\";");
-                var responseTask = _client.SendAsync(requestMessage);
-
-                return Content(responseTask.Result.Content.ReadAsStringAsync().Result);
-            }
-        }
-
-        [HttpGet("scores")]
-        public IActionResult GetScores()
+        [HttpGet("games")]
+        public IActionResult GetGames()
         {
             List<Game> games;
 
-            var ids = _context.Reviews.Select(o => o.Game).Distinct();
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
             {
                 requestMessage.Headers.Add("user-key", IGDB_KEY);
-                requestMessage.Content = new StringContent($"fields id, name, summary, cover.url; where id = ({string.Join(',', ids)});");
+                requestMessage.Content = new StringContent($"fields id, name, summary, cover.url; limit 100; where themes != (42) & cover.url != null;");
                 var responseTask = _client.SendAsync(requestMessage);
                 games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
             }
 
-            var scores = _context.Reviews.GroupBy(o => o.Game).Select(o => new { GameId = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
+            var scores = _context.Reviews.GroupBy(o => o.Game).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
 
-            var result = scores.Join(games, o => o.GameId, i => i.Id, (o, i) => new { o.GameId, i.Name, o.AvgScore, o.NumberOfReviews, CoverUrl = i.Cover.Url , i.Summary });
+            var result =
+                from game in games
+                join score in scores
+                on game.Id equals score.Id into g
+                from s in g.DefaultIfEmpty()
+                select new
+                {
+                    game.Id,
+                    game.Name,
+                    AvgScore = (s != null ? (double?)s.AvgScore : null),
+                    NumberOfReviews = (s != null ? (int?)s.NumberOfReviews : 0),
+                    CoverUrl = game.Cover.Url,
+                    game.Summary
+                };
 
             return new JsonResult(result);
         }
 
-        [HttpGet("games/{id}")]
-        public IActionResult GetGame(int id)
+
+        [HttpGet("games/{search}")]
+        public IActionResult GetGames(string search)
         {
-            Game game;
+            List<Game> games;
 
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
             {
                 requestMessage.Headers.Add("user-key", IGDB_KEY);
-                requestMessage.Content = new StringContent($"fields id, name; where id = {id};");
+                requestMessage.Content = new StringContent($"fields id, name, summary, cover.url; limit 100; where  name ~ *\"{ search }\"* & themes != (42) & cover.url != null;");
                 var responseTask = _client.SendAsync(requestMessage);
-                game = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result).FirstOrDefault();
+                games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
             }
 
-            return new JsonResult(game);
+            var scores = _context.Reviews.GroupBy(o => o.Game).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
+
+            var result =
+                from game in games
+                join score in scores
+                on game.Id equals score.Id into g
+                from s in g.DefaultIfEmpty()
+                select new
+                {
+                    game.Id,
+                    game.Name,
+                    AvgScore = (s != null ? (double?)s.AvgScore : null),
+                    NumberOfReviews = (s != null ? (int?)s.NumberOfReviews : 0),
+                    CoverUrl = game.Cover.Url,
+                    game.Summary
+                };
+
+            return new JsonResult(result);
         }
+
+        //[HttpGet("games/{id}")]
+        //public IActionResult GetGame(int id)
+        //{
+        //    Game game;
+
+        //    using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
+        //    {
+        //        requestMessage.Headers.Add("user-key", IGDB_KEY);
+        //        requestMessage.Content = new StringContent($"fields id, name; where id = {id};");
+        //        var responseTask = _client.SendAsync(requestMessage);
+        //        game = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result).FirstOrDefault();
+        //    }
+
+        //    return new JsonResult(game);
+        //}
 
         [HttpGet("reviews/{gameId}")]
         public IActionResult GetReviews(int gameId)
         {
-            return new JsonResult(_context.Reviews.Where(o => o.Game == gameId));
+            return new JsonResult(_context.Reviews.Where(o => o.Game == gameId).ToArray());
         }
 
-        [HttpPut("reviews/{gameId}/{user}")]
+        [HttpPut("reviews")]
         public IActionResult EditReview([FromBody] EditReview args)
         {
             var review = _context.Reviews.SingleOrDefault(o => o.Game == args.Game && o.User == args.User);

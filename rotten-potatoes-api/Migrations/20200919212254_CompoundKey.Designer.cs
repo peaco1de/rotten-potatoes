@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rotten_potatoes_api.Models;
 
 namespace rotten_potatoes_api.Migrations
 {
     [DbContext(typeof(ReviewsContext))]
-    partial class ReviewsContextModelSnapshot : ModelSnapshot
+    [Migration("20200919212254_CompoundKey")]
+    partial class CompoundKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +32,7 @@ namespace rotten_potatoes_api.Migrations
                     b.Property<DateTime>("AddDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 9, 21, 12, 27, 10, 92, DateTimeKind.Local).AddTicks(6471));
+                        .HasDefaultValue(new DateTime(2020, 9, 19, 17, 22, 54, 533, DateTimeKind.Local).AddTicks(4959));
 
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");

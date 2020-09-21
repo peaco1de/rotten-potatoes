@@ -1,16 +1,45 @@
 <h2 mat-dialog-title>{{ game.name }}</h2>
 <mat-dialog-content>
     <div class="details-grid">
-        <div class="box" gdarea="image" style="background-color: red;"></div>
-        <div class="box" gdarea="details" style="background-color: blue;"></div>
-        <div class="box" gdarea="reviews" style="background-color: green;"></div>
+        <div class="box image-box">
+            <img src="{{ game.coverUrl }}"
+                 alt="No Image"
+                 class="cover-image" />
+        </div>
+        <div class="box details-box">
+            <div class="scrollable">
+                <h3>Average Score: {{ game.avgScore }}/10</h3>
+                <h3>Number of Reviews: {{ game.numberOfReviews }}</h3>
+
+                <h3>Summary</h3>
+                <p>{{ game.summary }}</p>
+            </div>
+        </div>
+        <div class="box reviews-box">
+            <mat-list>
+                <ng-container *ngFor="let review of reviews; last as isLast; let false as isExpanded;">
+                    <mat-list-item style="height: auto; padding-top: 5px;">
+                        <div mat-list-icon>{{ review.score }}</div>
+                        <div mat-line fxLayout="row" fxLayoutAlign="space-between">
+                            <div>{{ review.user }}</div>
+                            <div>{{ review.addDate | date }}</div>
+                        </div>
+                        <div mat-line class="review review-{{ isExpanded ? 'expanded' : 'collapsed' }}">
+                            {{ review.details }}
+                        </div>
+                        <div mat-line fxLayout="row" fxLayoutAlign="center"
+                             (click)="isExpanded = !isExpanded">
+                            <mat-icon>{{ isExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+                        </div>
+                    </mat-list-item>
+                    <mat-divider *ngIf="!isLast"></mat-divider>
+                </ng-container>
+            </mat-list>
+        </div>
         <mat-spinner *ngIf="isLoading" style="margin: auto"></mat-spinner>
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button mat-dialog-close>Close</button>
-    <button mat-button [mat-dialog-close]="true">New Review</button>
+    <button mat-button [mat-dialog-close]="true" (click)="showAdd()">New Review</button>
 </mat-dialog-actions>
-
-
-

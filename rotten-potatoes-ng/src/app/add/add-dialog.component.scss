@@ -2,12 +2,9 @@
     display: grid;
     width: auto;
     height: auto;
-    grid-template-areas:
-        "image details details"
-        "reviews reviews reviews"
-        "reviews reviews reviews";
+    grid-template-areas: "image details details" "review review review";
     grid-template-columns: 200px 200px 200px;
-    grid-template-rows: 200px 200px 200px;
+    grid-template-rows: 200px auto;
 }
 
 .details-grid .image-box {
@@ -20,8 +17,8 @@
     padding: 10px;
 }
 
-.details-grid .reviews-box {
-    grid-area: reviews;
+.details-grid .review-box {
+    grid-area: review;
     padding: 10px;
 }
 
@@ -34,14 +31,4 @@
 img.cover-image {
     width: 100%;
     height: 100%;
-}
-
-.review-collapsed {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.review-expanded {
-    white-space: normal !important;
 }
