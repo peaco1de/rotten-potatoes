@@ -7,13 +7,17 @@ import { Game } from '../models/Game';
     styleUrls: ['./home.component.scss'],
     templateUrl: './home.component.html',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
     game: Game;
 
     constructor(
         private _reviewService: ReviewService
     ) {
+
+    }
+
+    ngOnInit(): void {
 
     }
 }
