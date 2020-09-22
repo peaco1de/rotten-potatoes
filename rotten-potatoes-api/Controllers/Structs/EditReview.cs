@@ -7,9 +7,9 @@ namespace rotten_potatoes_api.Controllers
 {
     public struct EditReview
     {
-        public int Game;
-        public string User;
-        public int Score;
-        public string Details;
+        public int Game { get; set; }
+        public string User { get; set; }
+        public int Score { get; set; }
+        public string Details { get; set; }
     }
 }

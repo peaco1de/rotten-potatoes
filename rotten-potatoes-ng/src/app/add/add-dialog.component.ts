@@ -35,5 +35,6 @@ export class AddDialogComponent implements OnInit {
     submit() {
         this._reviewService.putReview(this.newReview)
             .subscribe();
+        this.game.avgScore = (this.game.avgScore * this.game.numberOfReviews + this.newReview.score) / ++this.game.numberOfReviews;
     }
 }

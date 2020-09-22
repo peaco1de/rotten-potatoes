@@ -34,9 +34,9 @@ export class DetailsDialogComponent implements OnInit {
             });
     }
 
-    showAdd(game: Game) {
+    showAdd() {
         this._dialog.open(AddDialogComponent, {
-            data: game
+            data: this.game
         });
     }
 }

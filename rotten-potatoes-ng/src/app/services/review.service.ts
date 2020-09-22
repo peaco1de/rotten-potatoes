@@ -34,6 +34,7 @@ export class ReviewService {
     }
 
     public putReview(review: Review) {
+        console.log(review);
         return this._httpClient.put(`${_baseApiUrl}reviews`, { Game: review.game, User: review.user, Score: review.score, Details: review.details });
     }
 }

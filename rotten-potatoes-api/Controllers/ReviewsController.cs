@@ -62,7 +62,6 @@ namespace rotten_potatoes_api.Controllers
             return new JsonResult(result);
         }
 
-
         [HttpGet("games/{search}")]
         public IActionResult GetGames(string search)
         {
@@ -96,22 +95,6 @@ namespace rotten_potatoes_api.Controllers
             return new JsonResult(result);
         }
 
-        //[HttpGet("games/{id}")]
-        //public IActionResult GetGame(int id)
-        //{
-        //    Game game;
-
-        //    using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
-        //    {
-        //        requestMessage.Headers.Add("user-key", IGDB_KEY);
-        //        requestMessage.Content = new StringContent($"fields id, name; where id = {id};");
-        //        var responseTask = _client.SendAsync(requestMessage);
-        //        game = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result).FirstOrDefault();
-        //    }
-
-        //    return new JsonResult(game);
-        //}
-
         [HttpGet("reviews/{gameId}")]
         public IActionResult GetReviews(int gameId)
         {
@@ -122,7 +105,6 @@ namespace rotten_potatoes_api.Controllers
         public IActionResult EditReview([FromBody] EditReview args)
         {
             var review = _context.Reviews.SingleOrDefault(o => o.Game == args.Game && o.User == args.User);
-
             if (review == null)
             {
                 _context.Reviews.Add(
