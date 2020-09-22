@@ -1,4 +1,12 @@
-<mat-tab-group>
-    <mat-tab label="games"><app-games></app-games></mat-tab>
-    <mat-tab label="recent reviews"></mat-tab>
-</mat-tab-group>
+<div class="centered">
+    <mat-form-field class="inline">
+        <mat-label>UserName</mat-label>
+        <mat-select [(ngModel)]="user.username">
+            <mat-option *ngFor="let user of users"
+                        [value]="user.userName">
+                {{ user.userName }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-button class="inline" (click)="createUser"><mat-icon>add</mat-icon></mat-button>
+</div>

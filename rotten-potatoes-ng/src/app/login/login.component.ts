@@ -3,13 +3,11 @@ import { ReviewService } from '../services/review.service';
 import { Game } from '../models/Game';
 
 @Component({
-    selector: 'app-home',
-    styleUrls: ['./home.component.scss'],
-    templateUrl: './home.component.html',
+    selector: 'app-login',
+    styleUrls: ['./login.component.scss'],
+    templateUrl: './login.component.html',
 })
-export class HomeComponent implements OnInit {
-
-    game: Game;
+export class LoginComponent implements OnInit {
 
     constructor(
         private _reviewService: ReviewService
