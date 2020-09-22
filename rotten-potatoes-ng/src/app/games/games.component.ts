@@ -38,7 +38,7 @@ export class GamesComponent implements OnInit {
 
     ngOnInit(): void {
         this.isLoading = true;
-        this._reviewService.getGames("")
+        this._reviewService.getGames(this.search)
             .subscribe(o => {
                 this.games.push(...o);
                 this.filteredGames.push(...this.games);
