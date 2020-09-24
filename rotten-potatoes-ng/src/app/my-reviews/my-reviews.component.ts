@@ -4,6 +4,7 @@ import { Game } from '../models/Game';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailsDialogComponent } from '../details/details-dialog.component';
 import { AddDialogComponent } from '../add/add-dialog.component';
+import { Review } from '../models/Revew';
 
 @Component({
     selector: 'my-reviews',
@@ -12,22 +13,8 @@ import { AddDialogComponent } from '../add/add-dialog.component';
 })
 export class MyReviewsComponent implements OnInit {
 
-
     isLoading: boolean = false;
-
-    games: Game[] = [];
-    filteredGames: Game[] = [];
-
-    private _search: string = '';
-    get search(): string {
-        return this._search;
-    }
-    set search(search: string) {
-        this.isLoading = true;
-        this._search = search;
-        this.filteredGames = this.games.filter(o => o.name.toLowerCase().includes(search.toLowerCase()));
-        this.isLoading = false;
-    }
+    reviews: Review[];
 
     constructor(
         private _dialog: MatDialog,
@@ -44,12 +31,6 @@ export class MyReviewsComponent implements OnInit {
                 this.filteredGames.push(...this.games);
                 this.isLoading = false;
             });
-    }
-
-    showDetails(game: Game) {
-        this._dialog.open(DetailsDialogComponent, {
-            data: game
-        });
     }
 
     showAdd(game: Game) {
