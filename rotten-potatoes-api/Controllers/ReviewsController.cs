@@ -22,52 +22,17 @@ namespace rotten_potatoes_api.Controllers
         private const string IGDB_KEY = "236c3817b529d90e52ffddbc60c8b0d3";
         private const string IGDB_URL = @"https://api-v3.igdb.com/games";
 
-        private static readonly HttpClient _client = new HttpClient();
-        private static readonly ReviewsContext _context = new ReviewsContext();
+        private readonly HttpClient _client = new HttpClient();
+        private readonly ReviewsContext _context = new ReviewsContext();
 
         public ReviewsController()
         {
 
         }
-
-        //[HttpGet("games")]
-        //public IActionResult GetGames()
-        //{
-        //    List<Game> games;
-
-        //    using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
-        //    {
-        //        requestMessage.Headers.Add("user-key", IGDB_KEY);
-        //        requestMessage.Content = new StringContent($"fields id, name, summary, cover.url; limit 100; where themes != (42) & cover.url != null;");
-        //        var responseTask = _client.SendAsync(requestMessage);
-        //        games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
-        //    }
-
-        //    var scores = _context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
-
-        //    var result =
-        //        from game in games
-        //        join score in scores
-        //        on game.Id equals score.Id into g
-        //        from s in g.DefaultIfEmpty()
-        //        select new
-        //        {
-        //            game.Id,
-        //            game.Name,
-        //            AvgScore = (s != null ? (double?)s.AvgScore : null),
-        //            NumberOfReviews = (s != null ? (int?)s.NumberOfReviews : 0),
-        //            CoverUrl = game.Cover.Url,
-        //            game.Summary
-        //        };
-
-        //    return new JsonResult(result);
-        //}
-        
+       
         [HttpGet("games")]
         public IActionResult GetGames(string search = null, int? gameId = null)
         {
-            using ReviewsContext context = new ReviewsContext();
-
             List<Game> games;
 
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
@@ -79,15 +44,13 @@ namespace rotten_potatoes_api.Controllers
                 if (gameId != null) { builder.Append($" & id = { gameId }"); }
                 builder.Append(";");
 
-                Console.WriteLine(gameId);
-
                 requestMessage.Headers.Add("user-key", IGDB_KEY);
                 requestMessage.Content = new StringContent(builder.ToString());
                 var responseTask = _client.SendAsync(requestMessage);
                 games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
             }
 
-            var scores = context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
+            var scores = _context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
 
             var result =
                 from game in games
@@ -107,13 +70,13 @@ namespace rotten_potatoes_api.Controllers
             return new JsonResult(result);
         }
 
-
         //should be games/id/reviews
         [HttpGet("reviews/{gameId}")]
         public IActionResult GetReviews(int gameId)
         {
             return new JsonResult(_context.Reviews.Where(o => o.GameId == gameId).Select(o =>
             new {
+                o.ReviewId,
                 o.GameId,
                 o.UserId,
                 o.Score,
@@ -160,7 +123,7 @@ namespace rotten_potatoes_api.Controllers
             {
                 _context.Reviews.Remove(review);
                 _context.SaveChanges();
-                return Ok("Deleted");
+                return Ok();
             }
             else
             {

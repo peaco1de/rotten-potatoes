@@ -22,6 +22,10 @@ namespace rotten_potatoes_api.Models
 				.HasKey(o => o.ReviewId);
 
 			builder.Entity<Review>()
+				.Property(o => o.ReviewId)
+				.ValueGeneratedOnAdd();
+
+			builder.Entity<Review>()
 				.HasIndex(o => new { o.GameId, o.UserId })
 				.IsUnique();
 

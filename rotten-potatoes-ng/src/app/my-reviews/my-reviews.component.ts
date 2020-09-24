@@ -27,13 +27,13 @@ export class MyReviewsComponent {
         this.isLoading = true;
         this._userService.getReviews()
             .subscribe(o => {
-                this.reviews.push(...o);
+                this.reviews = o;
                 this.isLoading = false;
             });
     }
 
     onReviewDeleted(review: Review): void {
         const i = this.reviews.findIndex(o => o.reviewId === review.reviewId);
-        this.reviews.splice(i);
+        this.reviews.splice(i, 1);
     }
 }

@@ -10,23 +10,13 @@ import { AddDialogComponent } from '../add/add-dialog.component';
     styleUrls: ['./games.component.scss'],
     templateUrl: './games.component.html',
 })
-export class GamesComponent {
+export class GamesComponent implements OnInit {
 
     isLoading: boolean = false;
 
     games: Game[] = [];
-    filteredGames: Game[] = [];
 
-    private _search: string = '';
-    get search(): string {
-        return this._search;
-    }
-    set search(search: string) {
-        this.isLoading = true;
-        this._search = search;
-        this.filteredGames = this.games.filter(o => o.name.toLowerCase().includes(search.toLowerCase()));
-        this.isLoading = false;
-    }
+    search: string = '';
 
     constructor(
         private _dialog: MatDialog,
@@ -35,12 +25,20 @@ export class GamesComponent {
 
     }
 
+    ngOnInit(): void {
+        this.refresh();
+    }
+
     refresh(): void {
+        this.search = '';
+        this.filter();
+    }
+
+    private filter(): void {
         this.isLoading = true;
-        this._reviewService.getGames()
+        this._reviewService.getGames(this.search)
             .subscribe(o => {
-                this.games.push(...o);
-                this.filteredGames.push(...this.games);
+                this.games = o;
                 this.isLoading = false;
             });
     }

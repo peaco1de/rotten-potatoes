@@ -42,12 +42,14 @@ export class MyReviewComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(
-            o => this.review = o
+            o => {
+                if (o != '') this.review = o;
+            }
         );
     }
 
     delete() {
         this._reviewService.deleteReview(this.review.reviewId)
-            .subscribe(() => this.reviewDeleted.emit(this.review));
+            .subscribe(o => this.reviewDeleted.emit(this.review));
     }
 }

@@ -19,7 +19,7 @@ namespace rotten_potatoes_api.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private static readonly ReviewsContext _context = new ReviewsContext();
+        private readonly ReviewsContext _context = new ReviewsContext();
 
         [HttpGet("users")]
         public IActionResult GetUsers()
@@ -60,6 +60,7 @@ namespace rotten_potatoes_api.Controllers
             result.AddRange(_context.Reviews.Where(o => o.UserId == userId).Select(o =>
             new Review
             {
+                ReviewId = o.ReviewId,
                 GameId = o.GameId,
                 UserId = o.UserId,
                 Score = o.Score,

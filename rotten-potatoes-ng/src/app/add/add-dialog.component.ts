@@ -27,7 +27,6 @@ export class AddDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
         this._userService.getReview(this.game.id)
             .subscribe(o => {
                 if (o != null) {
