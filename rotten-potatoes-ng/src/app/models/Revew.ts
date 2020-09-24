@@ -2,6 +2,6 @@ export interface Review {
     game: number;
     score: number;
     details: string;
-    user: string;
+    userName: string;
     addDate: Date;
 }

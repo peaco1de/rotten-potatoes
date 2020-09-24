@@ -1,8 +1,10 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { EventEmitter, Component, OnInit, Input, Inject, Output } from '@angular/core';
 import { ReviewService } from '../services/review.service';
 import { Game } from '../models/Game';
 import { Review } from '../models/Revew';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { User } from '../models/User';
+import { UserService } from '../services/user.service';
 
 @Component({
     selector: 'create-user',
@@ -11,30 +13,33 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class CreateUserDialogComponent implements OnInit {
 
-    isLoading: boolean = false;
+    isSaving: boolean = false;
 
-    newReview: Review;
+    newUser: User;
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public game: Game,
-        private _reviewService: ReviewService
+        public dialogRef: MatDialogRef<CreateUserDialogComponent>,
+        private _userService: UserService
     ) {
 
     }
 
     ngOnInit(): void {
-        this.newReview = {
-            game: this.game.id,
-            user: "test",
-            score: null,
-            details: "",
-            addDate: new Date()
+        this.newUser =
+        {
+            userName: null
         };
     }
 
     submit() {
-        this._reviewService.putReview(this.newReview)
-            .subscribe();
-        this.game.avgScore = (this.game.avgScore * this.game.numberOfReviews + this.newReview.score) / ++this.game.numberOfReviews;
+        this._userService.createUser(this.newUser)
+            .subscribe(o => {
+                if (o != null) {
+                    this.dialogRef.close(o);
+                }
+                else {
+                    this.dialogRef.close();
+                }
+            });
     }
 }

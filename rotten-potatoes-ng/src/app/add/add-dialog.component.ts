@@ -2,7 +2,9 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ReviewService } from '../services/review.service';
 import { Game } from '../models/Game';
 import { Review } from '../models/Revew';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { User } from '../models/User';
+import { UserService } from '../services/user.service';
 
 @Component({
     selector: 'add-dialog',
@@ -17,15 +19,17 @@ export class AddDialogComponent implements OnInit {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public game: Game,
-        private _reviewService: ReviewService
+        private _reviewService: ReviewService,
+        private _userService: UserService
     ) {
 
     }
 
     ngOnInit(): void {
+
         this.newReview = {
             game: this.game.id,
-            user: "test",
+            userName: this._userService.getSelectedUser().userName,
             score: null,
             details: "",
             addDate: new Date()

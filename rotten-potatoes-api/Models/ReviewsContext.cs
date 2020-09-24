@@ -35,6 +35,11 @@ namespace rotten_potatoes_api.Models
 			builder.Entity<User>()
 				.Property("UserName");
 
+
+			builder.Entity<User>()
+				.HasMany(o => o.Reviews)
+				.WithOne(o => o.User);
+
 			#endregion
 
 		}

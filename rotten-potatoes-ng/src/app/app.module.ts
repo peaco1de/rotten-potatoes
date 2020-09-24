@@ -24,6 +24,9 @@ import { GamesComponent } from './games/games.component';
 import { DetailsDialogComponent } from './details/details-dialog.component';
 import { AddDialogComponent } from './add/add-dialog.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoginComponent } from './login/login.component';
+import { CreateUserDialogComponent } from './create-user/create-user.component';
+import { GuardService } from './services/guard.service';
 
 @NgModule({
     declarations: [
@@ -31,14 +34,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         HomeComponent,
         GamesComponent,
         DetailsDialogComponent,
-        AddDialogComponent
+        AddDialogComponent,
+        LoginComponent,
+        CreateUserDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
         HttpClientModule,
         FormsModule,
         RouterModule.forRoot([
-            { path: '', component: HomeComponent, pathMatch: 'full' },
+            { path: 'login', component: LoginComponent },
+            { path: 'home', component: HomeComponent, canActivate: [GuardService] },
+            { path: '', redirectTo: '/home', pathMatch: 'full' },
+            { path: '**', redirectTo: '/home' }
         ]),
         BrowserAnimationsModule,
 
