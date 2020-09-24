@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Create User</h2>
+<mat-dialog-content>
+    <mat-form-field style="width: 200px; margin-right: 20px">
+        <mat-label>
+            User Name
+        </mat-label>
+        <input matInput [(ngModel)]="newUser.userName">
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [disabled]="newUser.userName.length > 0" [mat-dialog-close]="true" (click)="submit()">Submit</button>
+</mat-dialog-actions>
