@@ -1,6 +1,7 @@
 <mat-list>
     <div mat-subheader>My Reviews</div>
-    <mat-list-item *ngFor="let review of reviews">
-
-    </mat-list-item>
+    <ng-container *ngFor="let review of reviews; last as isLast">
+        <mat-divider></mat-divider>
+        <my-review (reviewDeleted)="onReviewDeleted($event)" [review]="review"></my-review>
+    </ng-container>
 </mat-list>

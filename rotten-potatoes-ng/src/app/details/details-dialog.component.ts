@@ -4,6 +4,8 @@ import { Game } from '../models/Game';
 import { Review } from '../models/Revew';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { AddDialogComponent } from '../add/add-dialog.component';
+import { Expandable } from '../models/Expandable';
+import { map } from 'rxjs/operators'; 
 
 @Component({
     selector: 'details-dialog',
@@ -14,7 +16,7 @@ export class DetailsDialogComponent implements OnInit {
 
     isLoading: boolean = false;
 
-    reviews: Review[] = [];
+    reviews: Expandable<Review>[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public game: Game,
@@ -28,6 +30,9 @@ export class DetailsDialogComponent implements OnInit {
         this.isLoading = true;
         console.log(this.game);
         this._reviewService.getReviews(this.game.id)
+            .pipe(
+                map(o => o.map(r => new Expandable<Review>(r)))
+            )
             .subscribe(o => {
                 this.reviews.push(...o);
                 this.isLoading = false;

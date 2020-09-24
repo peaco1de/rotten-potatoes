@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { User } from '../models/User';
+import { Review } from '../models/Revew';
 
 const _baseApiUrl: string = "https://localhost:5003/api/users/";
 
@@ -32,5 +33,13 @@ export class UserService {
 
     public createUser(userName: string): Observable<User> {
         return this._httpClient.post<User>(`${_baseApiUrl}users`, { UserName: userName });
+    }
+
+    public getReview(gameId: number, userId: number = this._selectedUser.userId): Observable<Review> {
+        return this._httpClient.get<Review>(`${_baseApiUrl}users/${userId}/reviews/${gameId}`);
+    }
+
+    public getReviews(userId: number = this._selectedUser.userId): Observable<Review[]> {
+        return this._httpClient.get<Review[]>(`${_baseApiUrl}users/${userId}/reviews`);
     }
 }

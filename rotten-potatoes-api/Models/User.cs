@@ -6,9 +6,7 @@ namespace rotten_potatoes_api.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string UserName { get; set; }
-
-        public ICollection<Review> Reviews { get; set; }
     }
 }

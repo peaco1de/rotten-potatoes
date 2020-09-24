@@ -5,37 +5,35 @@ import { MatDialog } from '@angular/material/dialog';
 import { DetailsDialogComponent } from '../details/details-dialog.component';
 import { AddDialogComponent } from '../add/add-dialog.component';
 import { Review } from '../models/Revew';
+import { UserService } from '../services/user.service';
 
 @Component({
     selector: 'my-reviews',
     styleUrls: ['./my-reviews.component.scss'],
     templateUrl: './my-reviews.component.html',
 })
-export class MyReviewsComponent implements OnInit {
+export class MyReviewsComponent {
 
     isLoading: boolean = false;
-    reviews: Review[];
+    reviews: Review[] = [];
 
     constructor(
-        private _dialog: MatDialog,
-        private _reviewService: ReviewService
+        private _userService: UserService
     ) {
 
     }
 
-    ngOnInit(): void {
+    refresh(): void {
         this.isLoading = true;
-        this._reviewService.getGames(this.search)
+        this._userService.getReviews()
             .subscribe(o => {
-                this.games.push(...o);
-                this.filteredGames.push(...this.games);
+                this.reviews.push(...o);
                 this.isLoading = false;
             });
     }
 
-    showAdd(game: Game) {
-        this._dialog.open(AddDialogComponent, {
-            data: game
-        });
+    onReviewDeleted(review: Review): void {
+        const i = this.reviews.findIndex(o => o.reviewId === review.reviewId);
+        this.reviews.splice(i);
     }
 }

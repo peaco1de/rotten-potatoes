@@ -1,4 +1,4 @@
-<mat-tab-group>
+<mat-tab-group (selectedTabChange)="onTabChanged($event)">
     <mat-tab label="games"><app-games></app-games></mat-tab>
-    <mat-tab label="recent reviews"></mat-tab>
+    <mat-tab label="my reviews"><my-reviews></my-reviews></mat-tab>
 </mat-tab-group>

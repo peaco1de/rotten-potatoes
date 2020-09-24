@@ -27,6 +27,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { LoginComponent } from './login/login.component';
 import { CreateUserDialogComponent } from './create-user/create-user.component';
 import { GuardService } from './services/guard.service';
+import { MyReviewsComponent } from './my-reviews/my-reviews.component';
+import { MyReviewComponent } from './my-review/my-review.component';
 
 @NgModule({
     declarations: [
@@ -36,7 +38,9 @@ import { GuardService } from './services/guard.service';
         DetailsDialogComponent,
         AddDialogComponent,
         LoginComponent,
-        CreateUserDialogComponent
+        CreateUserDialogComponent,
+        MyReviewsComponent,
+        MyReviewComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

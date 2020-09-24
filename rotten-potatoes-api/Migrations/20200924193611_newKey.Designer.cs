@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rotten_potatoes_api.Models;
 
 namespace rotten_potatoes_api.Migrations
 {
     [DbContext(typeof(ReviewsContext))]
-    partial class ReviewsContextModelSnapshot : ModelSnapshot
+    [Migration("20200924193611_newKey")]
+    partial class newKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +31,7 @@ namespace rotten_potatoes_api.Migrations
                     b.Property<DateTime>("AddDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 9, 24, 15, 53, 39, 871, DateTimeKind.Local).AddTicks(7376));
+                        .HasDefaultValue(new DateTime(2020, 9, 24, 15, 36, 10, 829, DateTimeKind.Local).AddTicks(4684));
 
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
@@ -45,8 +47,7 @@ namespace rotten_potatoes_api.Migrations
 
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("GameId", "UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
                 });
@@ -68,6 +69,15 @@ namespace rotten_potatoes_api.Migrations
                         .HasFilter("[UserName] IS NOT NULL");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("rotten_potatoes_api.Models.Review", b =>
+                {
+                    b.HasOne("rotten_potatoes_api.Models.User", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

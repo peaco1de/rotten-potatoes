@@ -17,19 +17,19 @@
         </div>
         <div class="box reviews-box">
             <mat-list>
-                <ng-container *ngFor="let review of reviews; last as isLast; let false as isExpanded;">
+                <ng-container *ngFor="let review of reviews; last as isLast">
                     <mat-list-item style="height: auto; padding-top: 5px;">
-                        <div mat-list-icon>{{ review.score }}</div>
+                        <div mat-list-icon>{{ review.value.score }}</div>
                         <div mat-line fxLayout="row" fxLayoutAlign="space-between">
-                            <div>{{ review.userName }}</div>
-                            <div>{{ review.addDate | date }}</div>
+                            <div>{{ review.value.userName }}</div>
+                            <div>{{ review.value.addDate | date }}</div>
                         </div>
-                        <div mat-line class="review review-{{ isExpanded ? 'expanded' : 'collapsed' }}">
-                            {{ review.details }}
+                        <div mat-line class="review-{{ review.isExpanded ? 'expanded' : 'collapsed' }}">
+                            {{ review.value.details }}
                         </div>
                         <div mat-line fxLayout="row" fxLayoutAlign="center"
-                             (click)="isExpanded = !isExpanded">
-                            <mat-icon>{{ isExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+                             (click)="review.isExpanded = !review.isExpanded">
+                            <mat-icon>{{ review.isExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
                         </div>
                     </mat-list-item>
                     <mat-divider *ngIf="!isLast"></mat-divider>

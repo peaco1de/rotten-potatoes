@@ -10,8 +10,7 @@ import { AddDialogComponent } from '../add/add-dialog.component';
     styleUrls: ['./games.component.scss'],
     templateUrl: './games.component.html',
 })
-export class GamesComponent implements OnInit {
-
+export class GamesComponent {
 
     isLoading: boolean = false;
 
@@ -36,9 +35,9 @@ export class GamesComponent implements OnInit {
 
     }
 
-    ngOnInit(): void {
+    refresh(): void {
         this.isLoading = true;
-        this._reviewService.getGames(this.search)
+        this._reviewService.getGames()
             .subscribe(o => {
                 this.games.push(...o);
                 this.filteredGames.push(...this.games);

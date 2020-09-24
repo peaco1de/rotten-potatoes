@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -29,20 +30,64 @@ namespace rotten_potatoes_api.Controllers
 
         }
 
+        //[HttpGet("games")]
+        //public IActionResult GetGames()
+        //{
+        //    List<Game> games;
+
+        //    using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
+        //    {
+        //        requestMessage.Headers.Add("user-key", IGDB_KEY);
+        //        requestMessage.Content = new StringContent($"fields id, name, summary, cover.url; limit 100; where themes != (42) & cover.url != null;");
+        //        var responseTask = _client.SendAsync(requestMessage);
+        //        games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
+        //    }
+
+        //    var scores = _context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
+
+        //    var result =
+        //        from game in games
+        //        join score in scores
+        //        on game.Id equals score.Id into g
+        //        from s in g.DefaultIfEmpty()
+        //        select new
+        //        {
+        //            game.Id,
+        //            game.Name,
+        //            AvgScore = (s != null ? (double?)s.AvgScore : null),
+        //            NumberOfReviews = (s != null ? (int?)s.NumberOfReviews : 0),
+        //            CoverUrl = game.Cover.Url,
+        //            game.Summary
+        //        };
+
+        //    return new JsonResult(result);
+        //}
+        
         [HttpGet("games")]
-        public IActionResult GetGames()
+        public IActionResult GetGames(string search = null, int? gameId = null)
         {
+            using ReviewsContext context = new ReviewsContext();
+
             List<Game> games;
 
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
             {
+                var builder = new StringBuilder();
+                builder.Append("fields id, name, summary, cover.url; limit 100; ");
+                builder.Append("where themes != (42) & cover.url != null");
+                if (search != null) { builder.Append($" & name ~ *\"{ search }\"*"); }
+                if (gameId != null) { builder.Append($" & id = { gameId }"); }
+                builder.Append(";");
+
+                Console.WriteLine(gameId);
+
                 requestMessage.Headers.Add("user-key", IGDB_KEY);
-                requestMessage.Content = new StringContent($"fields id, name, summary, cover.url; limit 100; where themes != (42) & cover.url != null;");
+                requestMessage.Content = new StringContent(builder.ToString());
                 var responseTask = _client.SendAsync(requestMessage);
                 games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
             }
 
-            var scores = _context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
+            var scores = context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
 
             var result =
                 from game in games
@@ -62,43 +107,19 @@ namespace rotten_potatoes_api.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet("games/{search}")]
-        public IActionResult GetGames(string search)
-        {
-            List<Game> games;
 
-            using (var requestMessage = new HttpRequestMessage(HttpMethod.Post, IGDB_URL))
-            {
-                requestMessage.Headers.Add("user-key", IGDB_KEY);
-                requestMessage.Content = new StringContent($"fields id, name, summary, cover.url; limit 100; where  name ~ *\"{ search }\"* & themes != (42) & cover.url != null;");
-                var responseTask = _client.SendAsync(requestMessage);
-                games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
-            }
-
-            var scores = _context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
-
-            var result =
-                from game in games
-                join score in scores
-                on game.Id equals score.Id into g
-                from s in g.DefaultIfEmpty()
-                select new
-                {
-                    game.Id,
-                    game.Name,
-                    AvgScore = (s != null ? (double?)s.AvgScore : null),
-                    NumberOfReviews = (s != null ? (int?)s.NumberOfReviews : 0),
-                    CoverUrl = game.Cover.Url,
-                    game.Summary
-                };
-
-            return new JsonResult(result);
-        }
-
+        //should be games/id/reviews
         [HttpGet("reviews/{gameId}")]
         public IActionResult GetReviews(int gameId)
         {
-            return new JsonResult(_context.Reviews.Where(o => o.GameId == gameId).ToArray());
+            return new JsonResult(_context.Reviews.Where(o => o.GameId == gameId).Select(o =>
+            new {
+                o.GameId,
+                o.UserId,
+                o.Score,
+                o.Details,
+                o.AddDate
+            }));
         }
 
         [HttpPut("reviews")]
@@ -131,10 +152,10 @@ namespace rotten_potatoes_api.Controllers
             }
         }
 
-        [HttpDelete("reviews")]
-        public IActionResult DeleteReview([FromBody] DeleteReview args)
+        [HttpDelete("reviews/{reviewId}")]
+        public IActionResult DeleteReview(int reviewId)
         {
-            var review = _context.Reviews.SingleOrDefault(o => o.GameId == args.GameId && o.UserId == args.UserId);
+            var review = _context.Reviews.SingleOrDefault(o => o.ReviewId == reviewId);
             if (review != null)
             {
                 _context.Reviews.Remove(review);

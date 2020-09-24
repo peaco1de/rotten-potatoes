@@ -19,10 +19,14 @@ namespace rotten_potatoes_api.Models
             #region Review
 
             builder.Entity<Review>()
-				.HasKey(new[] { "GameId", "UserId" });
+				.HasKey(o => o.ReviewId);
 
 			builder.Entity<Review>()
-				.Property("AddDate")
+				.HasIndex(o => new { o.GameId, o.UserId })
+				.IsUnique();
+
+			builder.Entity<Review>()
+				.Property(o => o.AddDate)
 				.HasDefaultValue(DateTime.Now);
 
 			#endregion
@@ -30,22 +34,18 @@ namespace rotten_potatoes_api.Models
 			#region
 
 			builder.Entity<User>()
-				.HasKey("Id");
+				.HasKey(o => o.UserId);
 
 			builder.Entity<User>()
 				.HasIndex(o => o.UserName)
 				.IsUnique();
 
 			builder.Entity<User>()
-				.Property("Id")
+				.Property(o => o.UserId)
 				.ValueGeneratedOnAdd();
 
 			builder.Entity<User>()
-				.Property("UserName");
-
-			builder.Entity<User>()
-				.HasMany(o => o.Reviews)
-				.WithOne(o => o.User);
+				.Property(o => o.UserName);
 
 			#endregion
 
