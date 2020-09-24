@@ -21,7 +21,7 @@
                     <mat-list-item style="height: auto; padding-top: 5px;">
                         <div mat-list-icon>{{ review.score }}</div>
                         <div mat-line fxLayout="row" fxLayoutAlign="space-between">
-                            <div>{{ review.user }}</div>
+                            <div>{{ review.userName }}</div>
                             <div>{{ review.addDate | date }}</div>
                         </div>
                         <div mat-line class="review review-{{ isExpanded ? 'expanded' : 'collapsed' }}">

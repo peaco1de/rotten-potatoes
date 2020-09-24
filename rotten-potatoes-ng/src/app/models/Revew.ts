@@ -1,7 +1,7 @@
 export interface Review {
-    game: number;
+    gameId: number;
+    userId: number;
     score: number;
     details: string;
-    userName: string;
     addDate: Date;
 }

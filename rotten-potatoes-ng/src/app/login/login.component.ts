@@ -33,7 +33,9 @@ export class LoginComponent implements OnInit {
     createUser() {
         const dialogRef = this._dialog.open(CreateUserDialogComponent);
         dialogRef.afterClosed().subscribe(
-            o => this.users.push(o)
+            o => {
+                if (o) { this.users.push(o); }
+            }
         );
     }
 

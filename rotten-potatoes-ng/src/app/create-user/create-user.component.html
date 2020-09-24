@@ -4,10 +4,10 @@
         <mat-label>
             User Name
         </mat-label>
-        <input matInput [(ngModel)]="newUser.userName">
+        <input matInput [(ngModel)]="userName">
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-button [disabled]="newUser.userName.length > 0" [mat-dialog-close]="true" (click)="submit()">Submit</button>
+    <button mat-button [disabled]="userName.length === 0" [mat-dialog-close]="true" (click)="submit()">Submit</button>
 </mat-dialog-actions>

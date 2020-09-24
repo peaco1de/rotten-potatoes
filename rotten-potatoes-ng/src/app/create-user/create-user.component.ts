@@ -15,7 +15,7 @@ export class CreateUserDialogComponent implements OnInit {
 
     isSaving: boolean = false;
 
-    newUser: User;
+    userName: string;
 
     constructor(
         public dialogRef: MatDialogRef<CreateUserDialogComponent>,
@@ -25,21 +25,19 @@ export class CreateUserDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.newUser =
-        {
-            userName: null
-        };
     }
 
     submit() {
-        this._userService.createUser(this.newUser)
-            .subscribe(o => {
-                if (o != null) {
-                    this.dialogRef.close(o);
-                }
-                else {
-                    this.dialogRef.close();
-                }
-            });
+        if (this.userName.length > 0) {
+            this._userService.createUser(this.userName)
+                .subscribe(o => {
+                    if (o != null) {
+                        this.dialogRef.close(o);
+                    }
+                    else {
+                        this.dialogRef.close();
+                    }
+                });
+        }
     }
 }

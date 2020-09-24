@@ -42,7 +42,7 @@ namespace rotten_potatoes_api.Controllers
                 games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
             }
 
-            var scores = _context.Reviews.GroupBy(o => o.Game).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
+            var scores = _context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
 
             var result =
                 from game in games
@@ -75,7 +75,7 @@ namespace rotten_potatoes_api.Controllers
                 games = JsonSerializer.Deserialize<List<Game>>(responseTask.Result.Content.ReadAsStringAsync().Result);
             }
 
-            var scores = _context.Reviews.GroupBy(o => o.Game).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
+            var scores = _context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
 
             var result =
                 from game in games
@@ -98,42 +98,43 @@ namespace rotten_potatoes_api.Controllers
         [HttpGet("reviews/{gameId}")]
         public IActionResult GetReviews(int gameId)
         {
-            return new JsonResult(_context.Reviews.Where(o => o.Game == gameId).ToArray());
+            return new JsonResult(_context.Reviews.Where(o => o.GameId == gameId).ToArray());
         }
 
         [HttpPut("reviews")]
         public IActionResult EditReview([FromBody] EditReview args)
         {
-            var review = _context.Reviews.SingleOrDefault(o => o.Game == args.Game && o.User == args.User);
+            var review = _context.Reviews.SingleOrDefault(o => o.GameId == args.GameId && o.UserId == args.UserId);
             if (review == null)
             {
                 _context.Reviews.Add(
                     new Review
                     {
-                        Game = args.Game,
-                        User = args.User,
+                        GameId = args.GameId,
+                        UserId = args.UserId,
                         Score = args.Score,
                         Details = args.Details
                     }
                 );
 
                 _context.SaveChanges();
-                return Ok("Added");
+                return new JsonResult(new { Status = "Added", ScoreChange = 0 });
             }
             else
             {
+                var oldScore = review.Score;
                 review.Score = args.Score;
                 review.Details = args.Details;
 
                 _context.SaveChanges();
-                return Ok("Edited");
+                return new JsonResult(new { Status = "Edited", ScoreChange = review.Score - oldScore });
             }
         }
 
         [HttpDelete("reviews")]
         public IActionResult DeleteReview([FromBody] DeleteReview args)
         {
-            var review = _context.Reviews.SingleOrDefault(o => o.Game == args.Game && o.User == args.User);
+            var review = _context.Reviews.SingleOrDefault(o => o.GameId == args.GameId && o.UserId == args.UserId);
             if (review != null)
             {
                 _context.Reviews.Remove(review);

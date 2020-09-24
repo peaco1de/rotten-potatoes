@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Game } from "../models/Game";
 import { Observable } from "rxjs";
 import { Review } from '../models/Revew';
+import { EditReviewResult } from '../models/EditReviewResult';
 
 const _baseApiUrl: string = "https://localhost:5003/api/reviews/";
 
@@ -17,10 +18,6 @@ export class ReviewService {
 
     }
 
-    public test() {
-        return this._httpClient.get(`${_baseApiUrl}test`)
-    }
-
     //public getGame(gameId: number) : Observable<Game> {
     //    return this._httpClient.get<Game>(`${_baseApiUrl}games/${gameId}`);
     //}
@@ -33,8 +30,8 @@ export class ReviewService {
         return this._httpClient.get<Review[]>(`${_baseApiUrl}reviews/${gameId}`);
     }
 
-    public putReview(review: Review) {
+    public putReview(review: Review): Observable<EditReviewResult> {
         console.log(review);
-        return this._httpClient.put(`${_baseApiUrl}reviews`, { Game: review.game, User: review.userName, Score: review.score, Details: review.details });
+        return this._httpClient.put<EditReviewResult>(`${_baseApiUrl}reviews`, { GameId: review.gameId, UserId: review.userId, Score: review.score, Details: review.details });
     }
 }

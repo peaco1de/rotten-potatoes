@@ -28,8 +28,8 @@ export class AddDialogComponent implements OnInit {
     ngOnInit(): void {
 
         this.newReview = {
-            game: this.game.id,
-            userName: this._userService.getSelectedUser().userName,
+            gameId: this.game.id,
+            userId: this._userService.getSelectedUser().id,
             score: null,
             details: "",
             addDate: new Date()
@@ -38,7 +38,12 @@ export class AddDialogComponent implements OnInit {
 
     submit() {
         this._reviewService.putReview(this.newReview)
-            .subscribe();
-        this.game.avgScore = (this.game.avgScore * this.game.numberOfReviews + this.newReview.score) / ++this.game.numberOfReviews;
+            .subscribe(o => {
+                if (o.status === 'Added') {
+                    this.game.avgScore = (this.game.avgScore * this.game.numberOfReviews + this.newReview.score) / ++this.game.numberOfReviews;
+                } else if (o.status === 'Edited') {
+                    this.game.avgScore = (this.game.avgScore * this.game.numberOfReviews + o.scoreChange) / this.game.numberOfReviews;
+                }
+            });
     }
 }

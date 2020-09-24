@@ -30,7 +30,7 @@ export class UserService {
         return this._httpClient.get<User[]>(`${_baseApiUrl}users`);
     }
 
-    public createUser(user: User): Observable<User> {
-        return this._httpClient.post<User>(`${_baseApiUrl}users`, { UserName: user.userName });
+    public createUser(userName: string): Observable<User> {
+        return this._httpClient.post<User>(`${_baseApiUrl}users`, { UserName: userName });
     }
 }

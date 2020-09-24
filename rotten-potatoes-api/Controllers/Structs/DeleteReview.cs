@@ -7,7 +7,7 @@ namespace rotten_potatoes_api.Controllers
 {
     public struct DeleteReview
     {
-        public int Game { get; set; }
-        public string User { get; set; }
+        public int GameId { get; set; }
+        public int UserId { get; set; }
     }
 }

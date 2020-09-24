@@ -1,14 +1,16 @@
 <div class="centered">
-    <mat-form-field class="inline">
-        <mat-label>UserName</mat-label>
-        <mat-select [(ngModel)]="user">
-            <mat-option *ngFor="let user of users"
-                        [value]="user">
-                {{ user.userName }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-button class="inline" (click)="createUser"><mat-icon>add</mat-icon></mat-button>
+    <div flexLayout="row">
+        <mat-form-field>
+            <mat-label>User</mat-label>
+            <mat-select [(ngModel)]="selectedUser">
+                <mat-option *ngFor="let user of users"
+                            [value]="user">
+                    {{ user.userName }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <button mat-button (click)="createUser()"><mat-icon>add</mat-icon></button>
+    </div>
 
-    <mat-button [disabled]="selectedUser === null" (click)="submit()">Enter</mat-button>
+    <button mat-button [disabled]="!selectedUser" (click)="submit()">Enter</button>
 </div>
