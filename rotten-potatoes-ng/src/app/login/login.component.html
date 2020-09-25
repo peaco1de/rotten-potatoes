@@ -1,5 +1,11 @@
 <div class="centered">
-    <div fxLayout="row">
+    <div fxLayout="column" fxLayoutAlign="center center"
+         class="title-container">
+            <img src="assets/rotten-potato.png" />
+            <div class=" title">Rotten Potatoes</div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="center">
         <mat-form-field>
             <mat-label>User</mat-label>
             <mat-select [(ngModel)]="selectedUser">

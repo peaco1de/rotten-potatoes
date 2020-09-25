@@ -27,7 +27,7 @@ namespace rotten_potatoes_api.Controllers
 
         }
        
-        [HttpPut("reviews")]
+        [HttpPut()]
         public IActionResult EditReview([FromBody] EditReview args)
         {
             var review = _context.Reviews.SingleOrDefault(o => o.GameId == args.GameId && o.UserId == args.UserId);
@@ -57,7 +57,7 @@ namespace rotten_potatoes_api.Controllers
             }
         }
 
-        [HttpDelete("reviews/{reviewId}")]
+        [HttpDelete("{reviewId}")]
         public IActionResult DeleteReview(int reviewId)
         {
             var review = _context.Reviews.SingleOrDefault(o => o.ReviewId == reviewId);

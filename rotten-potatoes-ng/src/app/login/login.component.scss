@@ -1,8 +1,20 @@
+.title-container {
+    margin-bottom: 100px;
+}
+
+.title-container .title {
+    margin-top: 20px;
+    font-size: 72pt;
+    font-family: 'Courier';
+    font-weight: bold;
+    color: dimgray;
+}
+
 .centered {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -60%);
 }
 
 .inline {
