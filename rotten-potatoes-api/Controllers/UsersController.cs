@@ -21,7 +21,7 @@ namespace rotten_potatoes_api.Controllers
     {
         private readonly ReviewsContext _context = new ReviewsContext();
 
-        [HttpGet("users")]
+        [HttpGet()]
         public IActionResult GetUsers()
         {
             return new JsonResult(_context.Users.Select(o => new
@@ -31,7 +31,26 @@ namespace rotten_potatoes_api.Controllers
             }));
         }
 
-        [HttpGet("users/{userId}/reviews/{gameId}")]
+        [HttpGet("{userId}/reviews")]
+        public IActionResult GetReviews(int userId)
+        {
+            var result = new List<Review>();
+
+            result.AddRange(_context.Reviews.Where(o => o.UserId == userId).Select(o =>
+            new Review
+            {
+                ReviewId = o.ReviewId,
+                GameId = o.GameId,
+                UserId = o.UserId,
+                Score = o.Score,
+                Details = o.Details,
+                AddDate = o.AddDate
+            }));
+
+            return new JsonResult(result);
+        }
+
+        [HttpGet("{userId}/reviews/{gameId}")]
         public IActionResult GetReview(int userId, int gameId)
         {
             var review = _context.Reviews.SingleOrDefault(o => o.GameId == gameId && o.UserId == userId);
@@ -52,26 +71,7 @@ namespace rotten_potatoes_api.Controllers
             }
         }
 
-        [HttpGet("users/{userId}/reviews")]
-        public IActionResult GetReviews(int userId)
-        {
-            var result = new List<Review>();
-
-            result.AddRange(_context.Reviews.Where(o => o.UserId == userId).Select(o =>
-            new Review
-            {
-                ReviewId = o.ReviewId,
-                GameId = o.GameId,
-                UserId = o.UserId,
-                Score = o.Score,
-                Details = o.Details,
-                AddDate = o.AddDate
-            }));
-
-            return new JsonResult(result);
-        }
-
-        [HttpPost("users")]
+        [HttpPost()]
         public IActionResult PostUser([FromBody] PostUser args)
         {
             if (_context.Users.Any(o => o.UserName == args.UserName))

@@ -4,6 +4,7 @@ import { Game } from '../models/Game';
 import { MatDialog } from '@angular/material/dialog';
 import { DetailsDialogComponent } from '../details/details-dialog.component';
 import { AddDialogComponent } from '../add/add-dialog.component';
+import { GameService } from '../services/game.service';
 
 @Component({
     selector: 'app-games',
@@ -20,7 +21,7 @@ export class GamesComponent implements OnInit {
 
     constructor(
         private _dialog: MatDialog,
-        private _reviewService: ReviewService
+        private _gameService: GameService
     ) {
 
     }
@@ -34,9 +35,9 @@ export class GamesComponent implements OnInit {
         this.filter();
     }
 
-    private filter(): void {
+    filter(): void {
         this.isLoading = true;
-        this._reviewService.getGames(this.search)
+        this._gameService.getGames(this.search)
             .subscribe(o => {
                 this.games = o;
                 this.isLoading = false;

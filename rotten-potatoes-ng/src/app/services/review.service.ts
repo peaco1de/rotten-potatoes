@@ -18,24 +18,11 @@ export class ReviewService {
 
     }
 
-    public getGame(gameId: number) : Observable<Game> {
-        return this._httpClient.get<Game>(`${_baseApiUrl}games?gameId=${gameId}`);
-    }
-
-    public getGames(search: string = ''): Observable<Game[]> {
-        let url = search.length > 0 ? `${_baseApiUrl}games?search=${search}` : `${_baseApiUrl}games`;
-        return this._httpClient.get<Game[]>(url);
-    }
-
-    public getReviews(gameId: number): Observable<Review[]> {
-        return this._httpClient.get<Review[]>(`${_baseApiUrl}reviews/${gameId}`);
-    }
-
     public putReview(review: Review): Observable<EditReviewResult> {
-        return this._httpClient.put<EditReviewResult>(`${_baseApiUrl}reviews`, { GameId: review.gameId, UserId: review.userId, Score: review.score, Details: review.details });
+        return this._httpClient.put<EditReviewResult>(`${_baseApiUrl}`, { GameId: review.gameId, UserId: review.userId, Score: review.score, Details: review.details });
     }
 
     public deleteReview(reviewId: number) {
-        return this._httpClient.delete(`${_baseApiUrl}reviews/${reviewId}`);
+        return this._httpClient.delete(`${_baseApiUrl}/${reviewId}`);
     }
 }

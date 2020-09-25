@@ -6,6 +6,7 @@ import { DetailsDialogComponent } from '../details/details-dialog.component';
 import { AddDialogComponent } from '../add/add-dialog.component';
 import { Review } from '../models/Revew';
 import { UserService } from '../services/user.service';
+import { GameService } from '../services/game.service';
 
 @Component({
     selector: 'my-review',
@@ -26,13 +27,14 @@ export class MyReviewComponent implements OnInit {
 
     constructor(
         private _dialog: MatDialog,
-        private _reviewService: ReviewService
+        private _reviewService: ReviewService,
+        private _gameService: GameService
     ) {
 
     }
 
     ngOnInit(): void {
-        this._reviewService.getGame(this.review.gameId)
+        this._gameService.getGame(this.review.gameId)
             .subscribe(o => this.game = o[0]);
     }
 

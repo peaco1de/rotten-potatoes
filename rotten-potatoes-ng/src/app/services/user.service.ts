@@ -28,18 +28,18 @@ export class UserService {
     }
 
     public getUsers(): Observable<User[]> {
-        return this._httpClient.get<User[]>(`${_baseApiUrl}users`);
+        return this._httpClient.get<User[]>(`${_baseApiUrl}`);
     }
 
     public createUser(userName: string): Observable<User> {
-        return this._httpClient.post<User>(`${_baseApiUrl}users`, { UserName: userName });
+        return this._httpClient.post<User>(`${_baseApiUrl}`, { UserName: userName });
     }
 
     public getReview(gameId: number, userId: number = this._selectedUser.userId): Observable<Review> {
-        return this._httpClient.get<Review>(`${_baseApiUrl}users/${userId}/reviews/${gameId}`);
+        return this._httpClient.get<Review>(`${_baseApiUrl}/${userId}/reviews/${gameId}`);
     }
 
     public getReviews(userId: number = this._selectedUser.userId): Observable<Review[]> {
-        return this._httpClient.get<Review[]>(`${_baseApiUrl}users/${userId}/reviews`);
+        return this._httpClient.get<Review[]>(`${_baseApiUrl}/${userId}/reviews`);
     }
 }

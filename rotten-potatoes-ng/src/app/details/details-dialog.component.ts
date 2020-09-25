@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { ReviewService } from '../services/review.service';
-import { Game } from '../models/Game';
-import { Review } from '../models/Revew';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { map } from 'rxjs/operators';
 import { AddDialogComponent } from '../add/add-dialog.component';
 import { Expandable } from '../models/Expandable';
-import { map } from 'rxjs/operators'; 
+import { Game } from '../models/Game';
+import { Review } from '../models/Revew';
+import { GameService } from '../services/game.service';
 
 @Component({
     selector: 'details-dialog',
@@ -21,7 +21,7 @@ export class DetailsDialogComponent implements OnInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public game: Game,
         private _dialog: MatDialog,
-        private _reviewService: ReviewService
+        private _gameService: GameService
     ) {
 
     }
@@ -29,7 +29,7 @@ export class DetailsDialogComponent implements OnInit {
     ngOnInit(): void {
         this.isLoading = true;
         console.log(this.game);
-        this._reviewService.getReviews(this.game.id)
+        this._gameService.getReviews(this.game.id)
             .pipe(
                 map(o => o.map(r => new Expandable<Review>(r)))
             )
