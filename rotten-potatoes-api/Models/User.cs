@@ -10,8 +10,8 @@ namespace rotten_potatoes_api.Models
         public int UserId { get; set; }
         public string UserName { get; set; }
 
-        public List<Review> Reviews { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
 
-        public List<Favorite> Favorites { get; set; }
+        public virtual ICollection<Favorite> Favorites { get; set; }
     }
 }

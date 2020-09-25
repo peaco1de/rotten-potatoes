@@ -9,9 +9,9 @@ namespace rotten_potatoes_api.Models
         public int ReviewId { get; set; }
         public int GameId { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
         public int Score { get; set; }
         public string Details { get; set; }
-        public DateTime AddDate { get; set; }
+        public virtual DateTime AddDate { get; set; }
     }
 }

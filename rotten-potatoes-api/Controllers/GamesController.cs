@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using rotten_potatoes_api.Migrations;
 using rotten_potatoes_api.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace rotten_potatoes_api.Controllers
         private readonly ReviewsContext _context = new ReviewsContext();
 
         [HttpGet()]
-        public IActionResult GetGames(string search = null, int? gameId = null)
+        public IActionResult GetGames(string search = null, int? gameId = null, int? userId = null)
         {
             List<Game> games;
 
@@ -40,10 +41,15 @@ namespace rotten_potatoes_api.Controllers
 
             var scores = _context.Reviews.GroupBy(o => o.GameId).Select(o => new { Id = o.Key, AvgScore = o.Average(g => g.Score), NumberOfReviews = o.Count() }).ToList();
 
+            var favorites = _context.Users.SingleOrDefault(o => o.UserId == userId)?.Favorites?.Select(o => o.GameId) ?? new List<int>();
+
             var result =
                 from game in games
                 join score in scores
                 on game.Id equals score.Id into g
+                join favorite in favorites
+                on game.Id equals favorite into f
+                from t in f.DefaultIfEmpty(-1)
                 from s in g.DefaultIfEmpty()
                 select new
                 {
@@ -52,7 +58,8 @@ namespace rotten_potatoes_api.Controllers
                     AvgScore = (s != null ? (double?)s.AvgScore : null),
                     NumberOfReviews = (s != null ? (int?)s.NumberOfReviews : 0),
                     CoverUrl = game.Cover.Url,
-                    game.Summary
+                    game.Summary,
+                    isFavorite = t != -1
                 };
 
             return new JsonResult(result);
@@ -72,6 +79,5 @@ namespace rotten_potatoes_api.Controllers
                 o.AddDate
             }));
         }
-
     }
 }

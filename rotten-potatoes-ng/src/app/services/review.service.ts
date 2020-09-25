@@ -23,6 +23,6 @@ export class ReviewService {
     }
 
     public deleteReview(reviewId: number) {
-        return this._httpClient.delete(`${_baseApiUrl}/${reviewId}`);
+        return this._httpClient.delete(`${_baseApiUrl}${reviewId}`);
     }
 }

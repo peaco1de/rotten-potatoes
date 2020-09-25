@@ -6,6 +6,7 @@ import { UserService } from '../services/user.service';
 import { GamesComponent } from '../games/games.component';
 import { MyReviewsComponent } from '../my-reviews/my-reviews.component';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { FavoritesComponent } from '../favorites/favorites.component';
 
 
 
@@ -18,6 +19,8 @@ export class HomeComponent {
 
     @ViewChild(GamesComponent)
     private _gamesComponent: GamesComponent;
+    @ViewChild(FavoritesComponent)
+    private _favoritesComponent: FavoritesComponent;
     @ViewChild(MyReviewsComponent)
     private _myReviewsComponent: MyReviewsComponent;
 
@@ -33,6 +36,10 @@ export class HomeComponent {
                 break;
             }
             case 1: {
+                this._favoritesComponent.refresh();
+                break;
+            }
+            case 2: {
                 this._myReviewsComponent.refresh();
                 break;
             }

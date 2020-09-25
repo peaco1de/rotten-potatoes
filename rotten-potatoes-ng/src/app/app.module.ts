@@ -29,6 +29,7 @@ import { CreateUserDialogComponent } from './create-user/create-user.component';
 import { GuardService } from './services/guard.service';
 import { MyReviewsComponent } from './my-reviews/my-reviews.component';
 import { MyReviewComponent } from './my-review/my-review.component';
+import { FavoritesComponent } from './favorites/favorites.component';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import { MyReviewComponent } from './my-review/my-review.component';
         CreateUserDialogComponent,
         MyReviewsComponent,
         MyReviewComponent,
+        FavoritesComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 
 namespace rotten_potatoes_api.Controllers
 {
-    public struct PutFavorite
+    public struct EditReview
     {
         public int GameId { get; set; }
+        public int UserId { get; set; }
+        public int Score { get; set; }
+        public string Details { get; set; }
     }
 }

@@ -9,11 +9,11 @@ import { UserService } from '../services/user.service';
 import { User } from '../models/User';
 
 @Component({
-    selector: 'app-games',
-    styleUrls: ['./games.component.scss'],
-    templateUrl: './games.component.html',
+    selector: 'app-favorites',
+    styleUrls: ['./favorites.component.scss'],
+    templateUrl: './favorites.component.html',
 })
-export class GamesComponent implements OnInit {
+export class FavoritesComponent implements OnInit {
 
     isLoading: boolean = false;
 
@@ -22,7 +22,6 @@ export class GamesComponent implements OnInit {
 
     constructor(
         private _dialog: MatDialog,
-        private _gameService: GameService,
         private _userService: UserService,
     ) {
 
@@ -39,7 +38,7 @@ export class GamesComponent implements OnInit {
 
     filter(): void {
         this.isLoading = true;
-        this._gameService.getGames(this.search, this._userService.getSelectedUser().userId)
+        this._userService.getFavoriteGames(this.search)
             .subscribe(o => {
                 this.games = o;
                 this.isLoading = false;

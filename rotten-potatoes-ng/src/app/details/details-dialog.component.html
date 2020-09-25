@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="box reviews-box">
-            <mat-list>
+            <mat-list *ngIf="reviews.length > 0">
                 <ng-container *ngFor="let review of reviews; last as isLast">
                     <mat-list-item style="height: auto; padding-top: 5px;">
                         <div mat-list-icon>{{ review.value.score }}</div>
@@ -35,6 +35,12 @@
                     <mat-divider *ngIf="!isLast"></mat-divider>
                 </ng-container>
             </mat-list>
+            <div *ngIf="!(reviews.length > 0)"
+                 fxLayout="row"
+                 fxLayoutAlign="center"
+                 style="margin-top: 30px">
+                <span>NO REVIEWS</span>
+            </div>
         </div>
         <mat-spinner *ngIf="isLoading" style="margin: auto"></mat-spinner>
     </div>

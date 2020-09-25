@@ -5,4 +5,5 @@ export interface Game {
     numberOfReviews: number;
     coverUrl: string;
     summary: string;
+    isFavorite: boolean;
 }

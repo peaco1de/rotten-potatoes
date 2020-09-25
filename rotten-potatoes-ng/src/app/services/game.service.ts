@@ -21,12 +21,13 @@ export class GameService {
         return this._httpClient.get<Game>(`${_baseApiUrl}?gameId=${gameId}`);
     }
 
-    public getGames(search: string = ''): Observable<Game[]> {
-        let url = search.length > 0 ? `${_baseApiUrl}?search=${search}` : `${_baseApiUrl}games`;
+    public getGames(search: string = '', userId: number = null): Observable<Game[]> {
+        let url = [_baseApiUrl, '?', (search.length > 0 ? `search=${search}&` : ''), (userId != null ? `userId=${userId}` : '')].join('');
+
         return this._httpClient.get<Game[]>(url);
     }
 
     public getReviews(gameId: number): Observable<Review[]> {
-        return this._httpClient.get<Review[]>(`${_baseApiUrl}/${gameId}/reviews`);
+        return this._httpClient.get<Review[]>(`${_baseApiUrl}${gameId}/reviews`);
     }
 }

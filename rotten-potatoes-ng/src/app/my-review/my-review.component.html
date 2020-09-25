@@ -1,6 +1,6 @@
 <mat-list-item *ngIf="game" style="height: auto; padding-top: 10px; padding-bottom: 10px;">
     <div mat-line fxLayout="row" fxLayoutAlign="space-between">
-        <div>{{ game.name }} Score: {{ review.score }}</div>
+        <div><span style="font-weight: bold">{{ game.name }}</span><span> Score: {{ review.score }}</span></div>
         <button mat-button (click)="showEdit()">Edit</button>
     </div>
     <div mat-line fxLayout="row" fxLayoutAlign="space-between">
